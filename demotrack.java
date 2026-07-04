@@ -1,50 +1,61 @@
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class demotrack extends Frame {
-    public demotrack(){
-        
+
+    public demotrack() {
+
         super("VS Code Setup Assistant");
 
-        
-        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 10, 15);
-        setLayout(layout); 
-        
-        
+        setLayout(null);
+
         Label l1 = new Label("Enter your Choice:");
-        
         Choice c1 = new Choice();
+        Button btn = new Button("Select Extensions");
+        Label l2 = new Label("Result will appear here:");
+
         c1.add("Java");
         c1.add("C");
         c1.add("C++");
         c1.add("Python");
-        
-        Button btn = new Button("Select Extensions");
-        Label l2 = new Label("Result will appear here:                        "); // Added spacing so text doesn't cut off
-    
-  
+
+        l1.setBounds(30, 60, 120, 30);
+        c1.setBounds(160, 63, 120, 30);
+        btn.setBounds(30, 110, 140, 30);
+        l2.setBounds(30, 160, 340, 30);
+
         add(l1);
         add(c1);
         add(btn);
         add(l2);
 
-        // Connecting the button logic to update the text dynamically
         btn.addActionListener(e -> {
             String selectedLanguage = c1.getSelectedItem();
-            
-            if (selectedLanguage.equals("Java")) {
-                l2.setText("Result: Install 'Extension Pack for Java'");
-            } else if (selectedLanguage.equals("Python")) {
-                l2.setText("Result: Install 'Python by Microsoft'");
-            } else {
-                l2.setText("Result: Install 'C/C++ IntelliSense'");
+            switch (selectedLanguage) {
+                case "Java":
+                    l2.setText("Result: Install 'Extension Pack for Java'");
+                    break;
+                case "Python":
+                    l2.setText("Result: Install 'Python by Microsoft'");
+                    break;
+                default:
+                    l2.setText("Result: Install 'C/C++ IntelliSense'");
+                    break;
             }
         });
-        
-        
-        setSize(400, 200); 
+
+        // Window Close Handler
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(0);
+            }
+        });
+
+        setSize(400, 240);
         setVisible(true);
     }
-    
+
     public static void main(String[] args) {
         new demotrack();
     }
