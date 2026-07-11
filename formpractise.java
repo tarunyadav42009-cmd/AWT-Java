@@ -3,6 +3,8 @@ import java.awt.*;
 public class formpractise extends Frame {
     formpractise() {
 
+        super("Student Registration Form");
+
         FlowLayout f1 = new FlowLayout();
         Label T = new Label("Enter your Details:");
 
@@ -46,32 +48,43 @@ public class formpractise extends Frame {
         setLayout(null);
         T.setBounds(10, 45, 100, 20);
         add(T);
+
         l1.setBounds(30, 65, 100, 20);
         add(l1);
+
         t1.setBounds(130, 65, 100, 20);
         add(t1);
+
         l2.setBounds(30, 90, 95, 20);
         add(l2);
+
         t2.setBounds(130, 90, 100, 20);
         add(t2);
+
         l3.setBounds(30, 117, 100, 20);
         add(l3);
+
         b1.setBounds(30, 144, 50, 20);
         add(b1);
+
         b2.setBounds(90, 144, 60, 20);
         add(b2);
+
         l4.setBounds(30, 171, 100, 20);
         o1.setBounds(30, 195, 100, 20);
         add(o1);
         add(l4);
+
         l5.setBounds(180, 171, 100, 20);
         o2.setBounds(190, 195, 60, 20);
         o3.setBounds(270, 195, 60, 20);
         add(l5);
         add(o2);
         add(o3);
+
         r1.setBounds(30, 240, 180, 20);
         add(r1);
+
         z1.setBounds(30, 270, 100, 20);
         add(z1);
 
