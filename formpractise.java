@@ -5,7 +5,6 @@ public class formpractise extends Frame {
 
         super("Student Registration Form");
 
-        FlowLayout f1 = new FlowLayout();
         Label T = new Label("Enter your Details:");
 
         Label l1 = new Label("Name:");
