@@ -41,6 +41,8 @@ public class Marksheet_AWT extends Frame implements ActionListener {
     TextField t11 = new TextField(1);
 
     Marksheet_AWT() {
+
+        super("Student Marksheet");
         setLayout(null);
 
         N.setBounds(15, 30, 360, 20);
