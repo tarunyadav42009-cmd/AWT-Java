@@ -107,13 +107,13 @@ public class Marksheet_AWT extends Frame implements ActionListener {
         l10.setBounds(30, 365, 60, 20);
         add(l10);
 
-        t10.setBounds(90, 365, 60, 20);
+        t10.setBounds(90, 365, 100, 20);
         add(t10);
 
         l11.setBounds(200, 365, 60, 20);
         add(l11);
 
-        t11.setBounds(260, 365, 60, 20);
+        t11.setBounds(260, 365, 100, 20);
         add(t11);
 
         setSize(400, 600);
@@ -128,6 +128,28 @@ public class Marksheet_AWT extends Frame implements ActionListener {
             int sci = Integer.parseInt(t5.getText());
             int social_Sci = Integer.parseInt(t6.getText());
             int Maths = Integer.parseInt(t7.getText());
+
+            int total = hin + eng + mar + sci + social_Sci + Maths;
+            double avg = total / 6;
+
+            if (avg < 35) {
+                t11.setText(String.valueOf("Fail"));
+                t10.setText(String.valueOf("Bad"));
+            } else if (avg >= 35 && avg < 45) {
+                t11.setText(String.valueOf("Pass"));
+                t10.setText(String.valueOf("Good"));
+            } else if (avg >= 45 && avg < 60) {
+                t11.setText(String.valueOf("Second Class"));
+                t10.setText(String.valueOf("Average"));
+            } else if (avg >= 60 && avg < 75) {
+                t11.setText(String.valueOf("First Class"));
+                t10.setText(String.valueOf("Very Good!"));
+            } else if (avg >= 75) {
+                t11.setText(String.valueOf("First Class with Distinction"));
+                t10.setText(String.valueOf("Excellent!"));
+            }
+            t8.setText(String.valueOf(total));
+            t9.setText(String.valueOf(avg));
         }
     }
 
