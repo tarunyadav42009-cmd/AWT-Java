@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 public class formredirection extends Frame implements ActionListener {
 
+    Label l1 = new Label("Choose what colour you want to set as Backround: ");
     Button b1 = new Button("Red");
     Button b2 = new Button("Green");
     Button b3 = new Button("Blue");
@@ -11,6 +12,9 @@ public class formredirection extends Frame implements ActionListener {
     formredirection() {
 
         setLayout(null);
+
+        l1.setBounds(30, 63, 300, 20);
+        add(l1);
 
         b1.setBounds(30, 90, 70, 20);
         b1.addActionListener(this);
