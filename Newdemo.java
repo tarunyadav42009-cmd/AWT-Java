@@ -36,18 +36,18 @@ public class Newdemo extends Frame implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        //  Capture the new coordinate state
+        // Capture the new coordinate state
         mouseX = e.getX();
         mouseY = e.getY();
 
-        //  Request a screen refresh to reflect new coordinates
+        // Request a screen refresh to reflect new coordinates
         repaint();
     }
 
     public static void main(String[] args) {
         Newdemo app = new Newdemo();
-        app.setLocationRelativeTo(null); 
-        app.setVisible(true); 
+        app.setLocationRelativeTo(null);
+        app.setVisible(true);
     }
 
     @Override
