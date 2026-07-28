@@ -7,12 +7,12 @@ public class Newdemo extends Frame implements MouseListener {
     private int mouseY = 200;
 
     public Newdemo() {
-        // Initialize the desktop frame window
+        // Initializing the desktop frame window
         setTitle("AWT Repaint Demo");
         setSize(400, 400);
         setBackground(Color.WHITE);
 
-        // Attach listeners for user interactions
+        // Attaching listeners for user interactions
         addMouseListener(this);
 
         // Window closing adapter to handle clicking the 'X' button
@@ -27,7 +27,7 @@ public class Newdemo extends Frame implements MouseListener {
     @Override
     public void paint(Graphics g) {
         g.setColor(Color.RED);
-        // Draw an oval at the updated state coordinates
+        // Drawing an oval at the updated state coordinates
         g.fillOval(mouseX - 20, mouseY - 20, 40, 40);
 
         g.setColor(Color.BLACK);
@@ -40,7 +40,7 @@ public class Newdemo extends Frame implements MouseListener {
         mouseX = e.getX();
         mouseY = e.getY();
 
-        // Request a screen refresh to reflect new coordinates
+        // Requesting a screen refresh to reflect new coordinates
         repaint();
     }
 
