@@ -94,7 +94,8 @@ public class SQL extends JFrame implements ActionListener {
         // Set modern look and feel matching the OS system
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         setTitle("Database Login");
         setLayout(new GridBagLayout()); // Better spacing than FlowLayout
@@ -103,13 +104,15 @@ public class SQL extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // User ID Row
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         add(new JLabel("User ID:"), gbc);
         gbc.gridx = 1;
         add(t1, gbc);
 
         // Password Row
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         add(new JLabel("Password:"), gbc);
         gbc.gridx = 1;
         add(t2, gbc);
@@ -119,7 +122,8 @@ public class SQL extends JFrame implements ActionListener {
         buttonPanel.add(b1);
         buttonPanel.add(b2);
 
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.gridwidth = 2; // Span across both columns
         add(buttonPanel, gbc);
 
@@ -148,20 +152,22 @@ public class SQL extends JFrame implements ActionListener {
             // Modern try-with-resources handles open/close operations automatically
             // Class.forName() is removed as JDK 26 uses automatic SPI driver discovery
             try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                 PreparedStatement st = conn.prepareStatement("INSERT INTO tab VALUES(?, ?)")) {
-                
+                    PreparedStatement st = conn.prepareStatement("INSERT INTO tab VALUES(?, ?)")) {
+
                 st.setString(1, s);
                 st.setString(2, s2);
                 st.executeUpdate();
 
-                JOptionPane.showMessageDialog(this, "Data inserted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                
+                JOptionPane.showMessageDialog(this, "Data inserted successfully!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+
                 // Clear fields after success
                 t1.setText("");
                 t2.setText("");
 
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
         } else if (e.getSource() == b2) {
