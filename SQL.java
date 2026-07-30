@@ -81,11 +81,11 @@ import java.sql.*;
 public class SQL extends JFrame implements ActionListener {
     // Modern Swing Components
     private final JTextField t1 = new JTextField(15);
-    private final JPasswordField t2 = new JPasswordField(15); // Hides passwords visually
+    private final JPasswordField t2 = new JPasswordField(15);
     private final JButton b1 = new JButton("Send Data");
     private final JButton b2 = new JButton("Clear Data");
 
-    // XAMPP MySQL Configuration
+    // Updated MySQL Configuration for database 'inma'
     private static final String URL = "jdbc:mysql://localhost:3306/inma";
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -98,9 +98,9 @@ public class SQL extends JFrame implements ActionListener {
         }
 
         setTitle("Database Login");
-        setLayout(new GridBagLayout()); // Better spacing than FlowLayout
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8); // Padding around components
+        gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // User ID Row
@@ -121,10 +121,9 @@ public class SQL extends JFrame implements ActionListener {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.add(b1);
         buttonPanel.add(b2);
-
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 2; // Span across both columns
+        gbc.gridwidth = 2;
         add(buttonPanel, gbc);
 
         // Event Listeners
@@ -133,8 +132,8 @@ public class SQL extends JFrame implements ActionListener {
 
         // Frame Setup
         setSize(350, 200);
-        setLocationRelativeTo(null); // Centers window on screen
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Replaces manual WindowListener
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
@@ -142,17 +141,19 @@ public class SQL extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == b1) {
             String s = t1.getText().trim();
-            String s2 = new String(t2.getPassword()).trim(); // Modern password retrieval
+            String s2 = new String(t2.getPassword()).trim();
 
             if (s.isEmpty() || s2.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Modern try-with-resources handles open/close operations automatically
-            // Class.forName() is removed as JDK 26 uses automatic SPI driver discovery
+            // Updated Target table to 't1' with generic target columns (modify column names
+            // if different)
+            String sqlQuery = "INSERT INTO t1 (user_id, password) VALUES(?, ?)";
+
             try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                    PreparedStatement st = conn.prepareStatement("INSERT INTO tab VALUES(?, ?)")) {
+                    PreparedStatement st = conn.prepareStatement(sqlQuery)) {
 
                 st.setString(1, s);
                 st.setString(2, s2);
@@ -164,7 +165,6 @@ public class SQL extends JFrame implements ActionListener {
                 // Clear fields after success
                 t1.setText("");
                 t2.setText("");
-
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -177,7 +177,6 @@ public class SQL extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        // Runs GUI on the correct Event Dispatch Thread
         SwingUtilities.invokeLater(SQL::new);
     }
 }
