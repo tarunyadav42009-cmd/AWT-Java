@@ -148,25 +148,37 @@ public class SQL extends JFrame implements ActionListener {
                 return;
             }
 
-            // Updated Target table to 't1' with generic target columns (modify column names
-            // if different)
             String sqlQuery = "INSERT INTO t1 (user_id, password) VALUES(?, ?)";
 
-            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                    PreparedStatement st = conn.prepareStatement(sqlQuery)) {
+            try {
+                // 🌟 FORCE RUNTIME TO MANUALLY INITIALIZE THE MYSQL 9.2.0 DRIVER
+                Class.forName("com.mysql.cj.jdbc.Driver");
 
-                st.setString(1, s);
-                st.setString(2, s2);
-                st.executeUpdate();
+                try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+                        PreparedStatement st = conn.prepareStatement(sqlQuery)) {
 
-                JOptionPane.showMessageDialog(this, "Data inserted successfully!", "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
+                    st.setString(1, s);
+                    st.setString(2, s2);
+                    st.executeUpdate();
 
-                // Clear fields after success
-                t1.setText("");
-                t2.setText("");
+                    JOptionPane.showMessageDialog(this, "Data inserted successfully!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // Clear fields after success
+                    t1.setText("");
+                    t2.setText("");
+                }
+            } catch (ClassNotFoundException ex) {
+                // Catches if VS Code classpath is completely missing the JAR file reference
+                JOptionPane.showMessageDialog(this,
+                        "Driver File Missing in VS Code Build Path!\nPlease ensure mysql-connector-j-9.2.0.jar is in Referenced Libraries.",
+                        "Classpath Error",
+                        JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error",
+                // Catches database structural issues (wrong password, XAMPP/WAMP turned off,
+                // table t1 doesn't exist)
+                JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Database Error",
                         JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
