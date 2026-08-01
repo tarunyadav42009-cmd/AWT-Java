@@ -60,7 +60,8 @@ public class AWT_DEL extends JFrame implements ActionListener {
             String s = t1.getText().trim();
 
             if (s.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "User ID field cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "User ID field cannot be empty!", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -76,7 +77,7 @@ public class AWT_DEL extends JFrame implements ActionListener {
 
                     // Bind the dynamic User ID parameter safely
                     st.setString(1, s);
-                    
+
                     int rowsDeleted = st.executeUpdate();
 
                     if (rowsDeleted > 0) {
