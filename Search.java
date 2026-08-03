@@ -14,7 +14,7 @@ public class Search extends JFrame implements ActionListener {
     private final JButton b3 = new JButton("Search ID"); // New search button
 
     // Table components to show the output
-    private final DefaultTableModel tableModel = new DefaultTableModel(new String[]{"User ID", "Password"}, 0);
+    private final DefaultTableModel tableModel = new DefaultTableModel(new String[] { "User ID", "Password" }, 0);
     private final JTable resultTable = new JTable(tableModel);
     private final JScrollPane tableScrollPane = new JScrollPane(resultTable);
 
@@ -26,7 +26,8 @@ public class Search extends JFrame implements ActionListener {
     public Search() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         setTitle("Database Login & Search");
         setLayout(new GridBagLayout());
@@ -35,13 +36,16 @@ public class Search extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // User ID Row
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
         add(new JLabel("User ID:"), gbc);
         gbc.gridx = 1;
         add(t1, gbc);
 
         // Password Row
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         add(new JLabel("Password:"), gbc);
         gbc.gridx = 1;
         add(t2, gbc);
@@ -51,14 +55,19 @@ public class Search extends JFrame implements ActionListener {
         buttonPanel.add(b1);
         buttonPanel.add(b3); // Added search button
         buttonPanel.add(b2);
-        
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
         add(buttonPanel, gbc);
 
         // Table Output Row (Displays query results inside the window)
         tableScrollPane.setPreferredSize(new Dimension(300, 100));
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
-        gbc.weightx = 1.0; gbc.weighty = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         add(tableScrollPane, gbc);
 
@@ -98,11 +107,12 @@ public class Search extends JFrame implements ActionListener {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                 PreparedStatement st = conn.prepareStatement(sqlQuery)) {
+                    PreparedStatement st = conn.prepareStatement(sqlQuery)) {
                 st.setString(1, s);
                 st.setString(2, s2);
                 st.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Data inserted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Data inserted successfully!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
                 clearFields();
             }
         } catch (ClassNotFoundException | SQLException ex) {
@@ -113,7 +123,8 @@ public class Search extends JFrame implements ActionListener {
     private void searchData() {
         String searchId = t1.getText().trim();
         if (searchId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a User ID to search!", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter a User ID to search!", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -124,8 +135,8 @@ public class Search extends JFrame implements ActionListener {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                 PreparedStatement st = conn.prepareStatement(sqlQuery)) {
-                
+                    PreparedStatement st = conn.prepareStatement(sqlQuery)) {
+
                 st.setString(1, searchId);
                 try (ResultSet rs = st.executeQuery()) {
                     boolean recordsFound = false;
@@ -134,11 +145,12 @@ public class Search extends JFrame implements ActionListener {
                         String id = rs.getString("user_id");
                         String pass = rs.getString("password");
                         // Push found SQL row directly to the visual JTable layout
-                        tableModel.addRow(new Object[]{id, pass});
+                        tableModel.addRow(new Object[] { id, pass });
                     }
-                    
+
                     if (!recordsFound) {
-                        JOptionPane.showMessageDialog(this, "No records found for ID: " + searchId, "Info", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "No records found for ID: " + searchId, "Info",
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
@@ -155,9 +167,11 @@ public class Search extends JFrame implements ActionListener {
 
     private void handleException(Exception ex) {
         if (ex instanceof ClassNotFoundException) {
-            JOptionPane.showMessageDialog(this, "Driver File Missing in Build Path!", "Classpath Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Driver File Missing in Build Path!", "Classpath Error",
+                    JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
         ex.printStackTrace();
     }
