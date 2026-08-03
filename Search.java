@@ -78,7 +78,8 @@ public class Search extends JFrame implements ActionListener {
     private void searchData() {
         String searchId = t1.getText().trim();
         if (searchId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a User ID to search!", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter a User ID to search!", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -90,7 +91,7 @@ public class Search extends JFrame implements ActionListener {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                 PreparedStatement st = conn.prepareStatement(sqlQuery)) {
+                    PreparedStatement st = conn.prepareStatement(sqlQuery)) {
 
                 st.setString(1, searchId);
 
@@ -107,7 +108,8 @@ public class Search extends JFrame implements ActionListener {
                     }
 
                     if (!recordsFound) {
-                        JOptionPane.showMessageDialog(this, "No records found for ID: " + searchId, "Info", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "No records found for ID: " + searchId, "Info",
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
@@ -118,9 +120,11 @@ public class Search extends JFrame implements ActionListener {
 
     private void handleException(Exception ex) {
         if (ex instanceof ClassNotFoundException) {
-            JOptionPane.showMessageDialog(this, "Driver File Missing in Build Path!", "Classpath Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Driver File Missing in Build Path!", "Classpath Error",
+                    JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
         ex.printStackTrace();
     }
@@ -129,4 +133,3 @@ public class Search extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(Search::new);
     }
 }
-
