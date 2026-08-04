@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,9 +22,7 @@ public class Search_Letter extends JFrame {
     private final JComboBox<String> o2 = new JComboBox<>(new String[] { "1", "2", "3" });
     private final JComboBox<String> o3 = new JComboBox<>(new String[] { "1", "2", "3", "4", "5", "6" });
 
-    private final JCheckBox r1 = new JCheckBox("Accept Terms and Conditions");
-
-    // NEW CUSTOMIZATION: Live Result Table Components
+    // Live Result Table Components
     private final DefaultTableModel tableModel = new DefaultTableModel(
             new String[] { "Name", "Email", "Gender", "Discipline" }, 0);
     private final JTable resultTable = new JTable(tableModel);
@@ -34,9 +34,9 @@ public class Search_Letter extends JFrame {
     private static final String PASSWORD = "";
 
     public Search_Letter() {
-        super("Student Live Search Form");
+        super("Student Multi-Filter Live Search");
 
-        // Match user's local operating system look style
+        // Matching user's local operating system look style
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
@@ -44,7 +44,7 @@ public class Search_Letter extends JFrame {
 
         setLayout(null); // Retaining your original absolute positioning design layout
 
-        JLabel titleLabel = new JLabel("Live Search Student Details:");
+        JLabel titleLabel = new JLabel("Live Filter Student Details:");
         titleLabel.setBounds(10, 15, 200, 20);
         add(titleLabel);
 
@@ -89,62 +89,87 @@ public class Search_Letter extends JFrame {
         add(o2);
         add(o3);
 
-        r1.setBounds(30, 210, 250, 20);
-        add(r1);
-
-        // NEW CUSTOMIZATION: Setup result table layout at the bottom of the window
-        tableScrollPane.setBounds(30, 245, 330, 130);
+        tableScrollPane.setBounds(30, 205, 330, 165);
         add(tableScrollPane);
 
-        // NEW CUSTOMIZATION: Attached a DocumentListener to t1 for automatic live
-        // searching
-        t1.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                searchDataLive();
-            }
+        // --- LIVE SEARCH LISTENERS FOR ALL SECTIONS ---
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                searchDataLive();
-            }
+        // 1. DocumentListener for Name Field (t1)
+        t1.getDocument().addDocumentListener(new CustomDocumentListener());
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                searchDataLive();
-            }
-        });
+        // 2. DocumentListener for Email Field (t2)
+        t2.getDocument().addDocumentListener(new CustomDocumentListener());
 
-        // Window Frame Adjustments (Increased height to 430 to perfectly show the
-        // table)
-        setSize(400, 430);
+        // 3. ActionListeners for Radio Buttons (b1 & b2)
+        ActionListener radioListener = e -> searchDataLive();
+        b1.addActionListener(radioListener);
+        b2.addActionListener(radioListener);
+
+        // 4. ActionListeners for ComboBox Dropdowns (o1, o2, & o3)
+        ActionListener comboListener = e -> searchDataLive();
+        o1.addActionListener(comboListener);
+        o2.addActionListener(comboListener);
+        o3.addActionListener(comboListener);
+
+        // Window Frame Adjustments
+        setSize(400, 420);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+
+        // Optional: Trigger initial search to display all records on startup
+        searchDataLive();
     }
 
-    // NEW CUSTOMIZATION: Method that executes instantly as you type
-    private void searchDataLive() {
-        String searchName = t1.getText().trim();
-
-        // Clear table rows instantly if the input field becomes empty
-        if (searchName.isEmpty()) {
-            tableModel.setRowCount(0);
-            return;
+    // Reusable inner class to route text updates back to the search engine
+    private class CustomDocumentListener implements DocumentListener {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            searchDataLive();
         }
 
-        // Select records where name starts with whatever letters you type
-        String searchQuery = "SELECT name, email, gender, discipline FROM registrations WHERE name LIKE ?";
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            searchDataLive();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            searchDataLive();
+        }
+    }
+
+    // Searching method that dynamically chains filters across all form elements
+    private void searchDataLive() {
+        String searchName = t1.getText().trim();
+        String searchEmail = t2.getText().trim();
+        String searchGender = b1.isSelected() ? "Male" : (b2.isSelected() ? "Female" : "");
+        String searchDiscipline = (String) o1.getSelectedItem();
+        String searchYear = (String) o2.getSelectedItem();
+        String searchSemester = (String) o3.getSelectedItem();
+
+        // Building base query to dynamically narrow down fields via SQL parameters
+        String searchQuery = "SELECT name, email, gender, discipline FROM registrations " +
+                "WHERE name LIKE ? " +
+                "AND email LIKE ? " +
+                "AND gender LIKE ? " +
+                "AND discipline LIKE ? " +
+                "AND year LIKE ? " +
+                "AND semester LIKE ?";
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
                 PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
 
-            // Appending '%' treats your typed text as a starting prefix (e.g., 'T%')
+            // Bind values with dynamic wildcards to instantly match partial inputs
             pstmt.setString(1, searchName + "%");
+            pstmt.setString(2, searchEmail + "%");
+            pstmt.setString(3, searchGender.isEmpty() ? "%" : searchGender);
+            pstmt.setString(4, searchDiscipline + "%");
+            pstmt.setString(5, searchYear + "%");
+            pstmt.setString(6, searchSemester + "%");
 
             try (ResultSet rs = pstmt.executeQuery()) {
-                // Clear old visual rows right before adding new search match entries
-                tableModel.setRowCount(0);
+                tableModel.setRowCount(0); // Clear old results
 
                 while (rs.next()) {
                     String foundName = rs.getString("name");
@@ -152,13 +177,12 @@ public class Search_Letter extends JFrame {
                     String foundGender = rs.getString("gender");
                     String foundDiscipline = rs.getString("discipline");
 
-                    // Add matching rows straight to the UI table layout grid
                     tableModel.addRow(new Object[] { foundName, foundEmail, foundGender, foundDiscipline });
                 }
             }
 
         } catch (SQLException ex) {
-            System.err.println("Live Database Query Failed: " + ex.getMessage());
+            System.err.println("Live Database Filter Failed: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
