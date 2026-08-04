@@ -23,7 +23,8 @@ public class Search_Letter extends JFrame {
     private final JCheckBox r1 = new JCheckBox("Accept Terms and Conditions");
 
     // NEW CUSTOMIZATION: Live Result Table Components
-    private final DefaultTableModel tableModel = new DefaultTableModel(new String[] { "Name", "Email", "Gender", "Discipline" }, 0);
+    private final DefaultTableModel tableModel = new DefaultTableModel(
+            new String[] { "Name", "Email", "Gender", "Discipline" }, 0);
     private final JTable resultTable = new JTable(tableModel);
     private final JScrollPane tableScrollPane = new JScrollPane(resultTable);
 
@@ -95,7 +96,8 @@ public class Search_Letter extends JFrame {
         tableScrollPane.setBounds(30, 245, 330, 130);
         add(tableScrollPane);
 
-        // NEW CUSTOMIZATION: Attached a DocumentListener to t1 for automatic live searching
+        // NEW CUSTOMIZATION: Attached a DocumentListener to t1 for automatic live
+        // searching
         t1.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -113,9 +115,10 @@ public class Search_Letter extends JFrame {
             }
         });
 
-        // Window Frame Adjustments (Increased height to 430 to perfectly show the table)
-        setSize(400, 430); 
-        setLocationRelativeTo(null); 
+        // Window Frame Adjustments (Increased height to 430 to perfectly show the
+        // table)
+        setSize(400, 430);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -134,7 +137,7 @@ public class Search_Letter extends JFrame {
         String searchQuery = "SELECT name, email, gender, discipline FROM registrations WHERE name LIKE ?";
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+                PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
 
             // Appending '%' treats your typed text as a starting prefix (e.g., 'T%')
             pstmt.setString(1, searchName + "%");
