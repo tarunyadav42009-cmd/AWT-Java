@@ -107,8 +107,8 @@ public class Main {
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/AWT-Java.git
+   cd AWT-Java
    ```
 
 2. **Compile the source files:**
