@@ -86,7 +86,7 @@ public class UPDATE_AWT extends JFrame implements ActionListener {
                     // Bind parameters securely (1st '?' is password, 2nd '?' is user_id)
                     st.setString(1, s2);
                     st.setString(2, s);
-                    
+
                     int rowsUpdated = st.executeUpdate();
 
                     if (rowsUpdated > 0) {
